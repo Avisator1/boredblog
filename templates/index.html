@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}bored blog{% endblock %}
+
+{% block content %}
+    <header class="text-center mt-5">
+        <h1>welcome to bored blog</h1>
+        <p class="lead">learning something new.</p>
+    </header>
+    
+    <section class="features mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h2 class="card-title">Monthly Events</h2>
+                        <p class="card-text">we host events</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h2 class="card-title">discord</h2>
+                        <p class="card-text">we have a community discord server</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h2 class="card-title">live chat</h2>
+                        <p class="card-text">we have a live chat lol</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta text-center mt-5">
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Stay updated with the latest articles and news from our blog.</p>
+        <form>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Enter your email">
+            </div>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+    </section>
+{% endblock %}

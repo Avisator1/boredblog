@@ -1,0 +1,47 @@
+/* Add custom CSS styles here */
+
+body {
+    background-color: #121212 !important;
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.card {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    margin: 10px;
+}
+
+.card-title {
+    font-size: 1.5rem;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+.features {
+    margin-top: 40px;
+}
+
+.cta {
+    margin-top: 40px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Email Verification{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Email Verification</h1>
+    <form method="POST" action="/verify">
+        <div class="mb-3">
+            <label for="verification_code" class="form-label">Verification Code:</label>
+            <input type="text" name="verification_code" id="verification_code" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+
+    {% if verification_error %}
+    <div class="alert alert-danger mt-3">
+        Verification code is incorrect. Please try again.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
