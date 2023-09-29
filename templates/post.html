@@ -1,7 +1,108 @@
 {% extends "base.html" %}
 
-{% block title %}bored blog{% endblock %}
+{% block title %}Bored Posts{% endblock %}
 
 {% block content %}
+<div class="container">
+    <h1 class="mt-3 text-white">Bored Posts</h1>
+    {% if username %}
+    <p class="text-white">Welcome, {{ username }}!</p>
+    {% if is_admin %}
+    <form method="POST" action="/posts" class="mb-4">
+        <!-- Form for creating a new post (if user is admin) -->
+        <div class="mb-3">
+            <label for="title" class="form-label text-white">Post Title:</label>
+            <input type="text" placeholder="Post Title" class="form-control bg-dark text-white" name="title" id="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="subject" class="form-label">Post Subject:</label>
+            <input type="text" class="form-control bg-dark text-white" name="subject" id="subject" required>
+        </div>
+        <div class="mb-3">
+            <label for="author" class="form-label">Author Name:</label>
+            <input type="text" class="form-control bg-dark text-white" name="author" id="author" required>
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">Post Body:</label>
+            <textarea class="form-control bg-dark text-white" name="content" id="content" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Post</button>
+    </form>
+    {% endif %}
 
+    <h2 class="mt-4 text-white">Search Posts</h2>
+    <form method="GET" action="/posts" class="mb-4">
+        <!-- Form for searching posts -->
+        <div class="input-group">
+            <input type="text" class="form-control text-white bg-dark" placeholder="Search posts" name="q" id="search-input">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    
+    {% for post in blog_posts %}
+    <div class="card mb-4 bg-dark text-white">
+        <div class="card-body">
+            <h3 class="card-title" data-post-id="{{ post._id }}">{{ post.title }}</h3>
+            <h6 class="card-subtitle mb-2 text-white">Author: {{ post.author }}</h6>
+            <p class="card-text" data-post-id="{{ post._id }}">{{ post.content }}</p>
+            <p class="card-text"><small class="text-white">Date: {{ post.date }}</small></p>
+            
+            <!-- Edit and Delete Buttons for Admins -->
+            {% if is_admin %}
+            <div class="mb-2">
+                <a href="{{ url_for('delete_post', post_id=post._id) }}" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Comment Form -->
+        <div class="card-footer">
+            <form method="POST" action="/add_comment">
+                <input type="hidden" name="post_id" value="{{ post._id }}">
+                <div class="mb-3">
+                    <textarea class="form-control bg-dark text-white" name="comment" rows="2" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+            </form>
+        </div>
+        
+        <!-- Display Comments -->
+        <ul class="list-group list-group-flush">
+            {% for comment in post.comments %}
+            <li class="list-group-item bg-dark text-white">
+                <strong>{{ comment.author }}</strong> - {{ comment.comment }}<br>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+    
+    <script>
+      // Get references to the search input field and results div
+      const searchInput = document.getElementById('search-input');
+      const blogPosts = document.querySelectorAll('.card');
+
+      // Function to filter and display search results
+      const filterResults = () => {
+          const searchQuery = searchInput.value.trim().toLowerCase();
+
+          // Iterate through blog post cards and show/hide based on the search query
+          blogPosts.forEach((post) => {
+              const postContent = post.textContent.toLowerCase();
+              if (postContent.includes(searchQuery)) {
+                  post.style.display = 'block'; // Show matching post
+              } else {
+                  post.style.display = 'none'; // Hide non-matching post
+              }
+          });
+      };
+
+      // Add an event listener to the search input for real-time filtering
+      searchInput.addEventListener('input', filterResults);
+    </script>
+
+    {% else %}
+    <p class="text-white">You need to <a href="/login">login</a> to view posts.</p>
+    {% endif %}
+</div>
 {% endblock %}

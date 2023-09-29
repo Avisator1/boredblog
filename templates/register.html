@@ -24,6 +24,13 @@
                 <h2 class="card-title text-center">Register</h2>
                 <form method="POST">
                     <div class="mb-3">
+                        {% if userExists %}
+                        <div class="alert alert-danger mt-3">
+                            Username or Email Exists in Database
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" name="username" minlength="5" class="form-control" id="username" placeholder="Enter your username" required>
                     </div>

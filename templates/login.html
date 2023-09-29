@@ -24,6 +24,13 @@
                 <h2 class="card-title text-center">Login</h2>
                 <form method="POST">
                     <div class="mb-3">
+                        {% if incorrectCreds %}
+                        <div class="alert alert-danger mt-3">
+                            Incorrect Credentials
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" name="username" class="form-control" id="username" placeholder="Enter your username" required>
                     </div>
