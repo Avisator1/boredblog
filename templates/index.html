@@ -59,10 +59,13 @@
         <h2>Latest Blog Post</h2>
         <div class="card bg-dark text-white">
             <div class="card-body">
-                <h5 class="card-title">{{ latest_post.title }}</h5>
-                <h6 class="card-subtitle mb-2 text-white">{{ latest_post.subject }}</h6>
-                <p class="card-text">{{ latest_post.content }}</p>
-                <p class="card-text"><small class="text-muted">{{ latest_post.date }}</small></p>
+                <h3 class="card-title" data-post-id="{{ latest_post._id }}">{{ latest_post.title }}</h3>
+                <h6 class="card-subtitle mb-2 text-white">Author: {{ latest_post.author }}</h6>
+
+            <!-- Display content exactly as the user typed it, preserving formatting and line breaks -->
+                <pre class="card-text" data-post-id="{{latest_post._id }}" style="white-space: pre-line;">{{ latest_post.content | safe }}</pre>
+
+                <p class="card-text"><small class="text-white">Date: {{ latest_post.date }}</small></p>
             </div>
         </div>
     </section>
