@@ -5,6 +5,8 @@ import random
 import string
 from flask_bcrypt import Bcrypt
 from datetime import datetime
+import smtplib
+from email.mime.text import MIMEText
 
 client = pymongo.MongoClient("mongodb+srv://avyuktballari:AZMKXJeKbOWQpB46@cluster0.qk6ukw8.mongodb.net/?retryWrites=true&w=majority")
 app = Flask(__name__)
@@ -118,7 +120,27 @@ def register():
             subject = "User Verification"
             message = f"Code: {random_string}"
 
-            # ... (email sending code)
+            msg = MIMEText(message)
+            msg["From"] = sender_email
+            msg["To"] = receiver_email
+            msg["Subject"] = subject
+
+            try:
+                with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                    server.starttls()
+                    server.login(sender_email, password)
+                    server.sendmail(sender_email, receiver_email, msg.as_string())
+                emailSent = True
+
+                # Store the random string in the session
+                session['random_string'] = random_string
+                session['username1'] = username
+                session['password1'] = password5
+                session['email1'] = email
+                # Redirect to the verification page
+                return redirect(url_for('verify_email'))
+            except Exception as e:
+                print(f"Error: {e}")
 
     return render_template('register.html', regBar=True, emailSent=emailSent, verification_error=verification_error, title="Register", userExists=userExists)
 
