@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, session, redirect, jsonify, render_template_string
+from flask import Flask, render_template, request, url_for, session, redirect, jsonify, Response
 from bson.objectid import ObjectId
 import pymongo
 import random
@@ -209,8 +209,9 @@ def about():
     return render_template('about.html', username=username,about1=True)
 
 @app.route('/robots.txt')
-def robots_txt():
-    return render_template_string('robots.txt')
-
+def noindex():
+    r = Response(response="User-Agent: *\nDisallow: /\n", status=200, mimetype="text/plain")
+    r.headers["Content-Type"] = "text/plain; charset=utf-8"
+    return r
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
