@@ -31,10 +31,11 @@ def home():
     else:
         notLogged = True
 
-    return render_template('index.html', home=True, username=username, title="bored blog", notLogged=notLogged, latest_post=latest_post)
+    return render_template('index.html', home=True, username=username, title="AdiAvi", notLogged=notLogged, latest_post=latest_post)
 
 @app.route('/posts', methods=['GET', 'POST'])
 def post():
+    new_post_id = None
     username = None
     is_admin = False
     posted = False
@@ -53,13 +54,15 @@ def post():
             if title and subject and content and author:
                 current_date = datetime.now().date()
                 current_date_str = current_date.isoformat()
-                blogposts.insert_one({
+                result = blogposts.insert_one({
                     "title": title,
                     "subject": subject,
                     "author": author,
                     "date": current_date_str,
                     "content": content
                 })
+                new_post_id = str(result.inserted_id)
+                return redirect(url_for('view_post', post_id=new_post_id))
                 posted = True
 
     blog_posts = db.blog_posts.find().sort("date", pymongo.DESCENDING)
@@ -71,7 +74,7 @@ def post():
         post['comments'] = list(comments_for_post)
         post_comments.append(post)
 
-    return render_template('post.html', posts=True, title="Bored Posts", blog_posts=post_comments, username=username, is_admin=is_admin, posted=posted)
+    return render_template('post.html', posts=True, title="AdiAvi Posts", blog_posts=post_comments, username=username, is_admin=is_admin, posted=posted)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -188,7 +191,6 @@ def add_comment():
    
     return redirect(request.referrer)
 
-
 @app.route('/delete_post/<post_id>')
 def delete_post(post_id):
     if "user_id" in session:
@@ -206,13 +208,53 @@ def about():
         if user:
             if user:
                 username = user["username"]
-    return render_template('about.html', username=username,about1=True)
+    return render_template('about.html', username=username,about1=True, title="About Us")
 
-@app.route('/robots.txt')
-def noindex():
-    r = Response(response="User-Agent: *\nDisallow: /\n", status=200, mimetype="text/plain")
-    r.headers["Content-Type"] = "text/plain; charset=utf-8"
-    return r
+
+@app.route('/post/<post_id>')
+def view_post(post_id):
+    if "user_id" in session:
+        user = userdb.find_one({"_id": ObjectId(session["user_id"])})
+        if user:
+            if user:
+                username = user["username"]
+    post = blogposts.find_one({"_id": ObjectId(post_id)})
+    post_title = post["title"]
+    
+    user_has_liked_post = False  # Initialize to False
+    
+    if "user_id" in session:
+        user = userdb.find_one({"_id": ObjectId(session["user_id"])})
+        if user:
+            liked_posts = user.get("liked_posts", [])
+            if post_id in liked_posts:
+                user_has_liked_post = True
+    
+    if post:
+        return render_template('view_post.html', post=post, posts=True, title=post_title, user_has_liked_post=user_has_liked_post, username=username)
+    else:
+        return "Post not found", 404
+
+
+@app.route('/like_post/<post_id>', methods=['POST'])
+def like_post(post_id):
+    if "user_id" in session:
+        user = userdb.find_one({"_id": ObjectId(session["user_id"])})
+        if user:
+            # Check if the user has already liked this post to prevent multiple likes
+            liked_posts = user.get("liked_posts", [])
+            if post_id not in liked_posts:
+                # Update the post's likes count in the database
+                blogposts.update_one({"_id": ObjectId(post_id)}, {"$inc": {"likes": 1}})
+                # Add the post_id to the user's list of liked posts
+                liked_posts.append(post_id)
+                userdb.update_one({"_id": user["_id"]}, {"$set": {"liked_posts": liked_posts}})
+    return redirect(url_for("view_post", post_id=post_id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

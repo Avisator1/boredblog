@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        color: white !important;
+    }
+</style>
+<div class="card bg-dark text-light mb-4">
+    <div class="card-header">
+        <h2 class="text-light">{{ post.title }}</h2>
+    </div>
+    <div class="card-body">
+        <h5 class="card-subtitle text-white mb-3">
+            Subject: {{ post.subject }}<br>Author: {{ post.author }}<br> Date: {{ post.date }}
+        </h5>
+        <p class="card-text">{{ post.content }}</p>
+
+        <!-- Like button with icon and number of likes -->
+            <!-- Like button with icon and number of likes -->
+                <form method="POST" action="/like_post/{{ post._id }}">
+                        <div class="d-flex align-items-center">
+                            <button type="submit" class="btn btn-link">
+                                {% if user_has_liked_post %}
+                                    <i class="fas fa-thumbs-up text-primary"></i>
+                                {% else %}
+                                    <i class="far fa-thumbs-up text-secondary"></i>
+                                {% endif %}
+                            </button>
+                            <span class="ml-2">{{ post.likes }}</span>
+                        </div>
+                </form>
+
+    </div>
+</div>
+
+<div class="card bg-dark text-light">
+    <div class="card-header">
+        <h4 class="text-light">Comments</h4>
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for comment in post.comments %}
+            <li class="list-group-item bg-dark text-light border-light">
+                <strong>{{ comment.author }}</strong> ({{ comment.date }}):
+                {{ comment.comment }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="card mt-4 bg-dark text-light">
+    <div class="card-header">
+        <h4 class="text-light">Add a Comment</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/add_comment">
+            <input type="hidden" name="post_id" value="{{ post._id }}">
+            <div class="mb-3">
+                <label for="comment" class="form-label text-light">Your Comment</label>
+                <textarea class="form-control bg-dark text-light" id="comment" name="comment" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

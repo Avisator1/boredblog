@@ -16,7 +16,7 @@
     {% endif %}
     {% if is_admin %}
     <form method="POST" action="/posts" class="mb-4">
-        <!-- Form for creating a new post (if user is admin) -->
+        <!-- Form for creating a new post (if the user is an admin) -->
         <div class="mb-3">
             <label for="title" class="form-label text-white">Post Title:</label>
             <input type="text" placeholder="Post Title" class="form-control bg-dark text-white" name="title" id="title" required>
@@ -52,8 +52,8 @@
             <h3 class="card-title" data-post-id="{{ post._id }}">{{ post.title }}</h3>
             <h6 class="card-subtitle mb-2 text-white">Author: {{ post.author }}</h6>
 
-            <!-- Display content exactly as the user typed it, preserving formatting and line breaks -->
-            <pre class="card-text" data-post-id="{{ post._id }}" style="white-space: pre-line;">{{ post.content | safe }}</pre>
+            <!-- Display content with a maximum of 200 characters and add an ellipsis if content is longer -->
+            <pre class="card-text" data-post-id="{{ post._id }}" style="white-space: pre-line;">{{ post.content[:200] + '...' if post.content|length > 200 else post.content | safe }}</pre>
 
             <p class="card-text"><small class="text-white">Date: {{ post.date }}</small></p>
 
@@ -65,19 +65,8 @@
             {% endif %}
         </div>
 
-        <!-- Comment Form (Only display when the user is signed in) -->
         <div class="card-footer">
-            {% if username %}
-            <form method="POST" action="/add_comment">
-                <input type="hidden" name="post_id" value="{{ post._id }}">
-                <div class="mb-3">
-                    <textarea class="form-control bg-dark text-white" name="comment" rows="2" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
-            </form>
-            {% else %}
-            <p class="text-white">You need to <a href="/login">login</a> to comment on this post.</p>
-            {% endif %}
+            <a class="btn btn-primary" href="/post/{{ post._id }}" role="button">View Entire Post</a>
         </div>
         
         <!-- Display Comments -->
