@@ -14,23 +14,24 @@
         <h5 class="card-subtitle text-white mb-3">
             Subject: {{ post.subject }}<br>Author: {{ post.author }}<br> Date: {{ post.date }}
         </h5>
-        <p class="card-text">{{ post.content }}</p>
+        <pre class="card-text" style="white-space: pre-line;">{{ post.content | safe }}</pre>
 
         <!-- Like button with icon and number of likes -->
-            <!-- Like button with icon and number of likes -->
-                <form method="POST" action="/like_post/{{ post._id }}">
-                        <div class="d-flex align-items-center">
-                            <button type="submit" class="btn btn-link">
-                                {% if user_has_liked_post %}
-                                    <i class="fas fa-thumbs-up text-primary"></i>
-                                {% else %}
-                                    <i class="far fa-thumbs-up text-secondary"></i>
-                                {% endif %}
-                            </button>
-                            <span class="ml-2">{{ post.likes }}</span>
-                        </div>
-                </form>
+        <form method="POST" action="/like_post/{{ post._id }}">
+            <div class="d-flex align-items-center">
+                {% if username %}
+                <button type="submit" class="btn btn-link">
+                    {% if user_has_liked_post %}
+                        <i class="fas fa-thumbs-up text-primary"></i>
+                    {% else %}
+                        <i class="far fa-thumbs-up text-secondary"></i>
+                    {% endif %}
+                </button>
 
+                <span class="ml-2">{{ post.likes }}</span>
+                {% endif %}
+            </div>
+        </form>
     </div>
 </div>
 
@@ -40,11 +41,10 @@
     </div>
     <ul class="list-group list-group-flush">
         {% for comment in post.comments %}
-            <li class="list-group-item bg-dark text-light border-light">
-                <strong>{{ comment.author }}</strong> ({{ comment.date }}):
-                {{ comment.comment }}
+            <li class="list-group-item bg-dark text-white">
+                <strong>{{ comment.author }}</strong> - {{ comment.comment }}<br>
             </li>
-        {% endfor %}
+            {% endfor %}
     </ul>
 </div>
 

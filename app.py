@@ -203,6 +203,7 @@ def delete_post(post_id):
 
 @app.route('/about')
 def about():
+    username = None
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
         if user:
@@ -213,6 +214,7 @@ def about():
 
 @app.route('/post/<post_id>')
 def view_post(post_id):
+    username = None
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
         if user:
@@ -229,9 +231,17 @@ def view_post(post_id):
             liked_posts = user.get("liked_posts", [])
             if post_id in liked_posts:
                 user_has_liked_post = True
-    
+    blog_posts = db.blog_posts.find().sort("date", pymongo.DESCENDING)
+    post_comments = []
+    for post in blog_posts:
+        comments_for_post = comments.find({"post_id": post["_id"]})
+        post['comments'] = list(comments_for_post)
+        post_comments.append(post)
     if post:
-        return render_template('view_post.html', post=post, posts=True, title=post_title, user_has_liked_post=user_has_liked_post, username=username)
+        if username:
+            return render_template('view_post.html', post=post, posts=True, title=post_title, user_has_liked_post=user_has_liked_post, username=username, blog_posts=post_comments)
+        else:
+            return render_template('view_post.html', post=post, posts=True, title=post_title, user_has_liked_post=user_has_liked_post)
     else:
         return "Post not found", 404
 
@@ -250,6 +260,18 @@ def like_post(post_id):
                 liked_posts.append(post_id)
                 userdb.update_one({"_id": user["_id"]}, {"$set": {"liked_posts": liked_posts}})
     return redirect(url_for("view_post", post_id=post_id))
+
+@app.route('/admin/users')
+def admin_users():
+    if "user_id" in session:
+        user = userdb.find_one({"_id": ObjectId(session["user_id"])})
+        if user and user.get("admin"):
+            users = userdb.find({}, {"password": 0})  # Exclude the "password" field
+            return render_template('admin_users.html', users=users)
+        else:
+            return redirect(url_for('home'))
+    else:
+        return redirect(url_for('home')) # Forbidden
 
 
 @app.errorhandler(404)
