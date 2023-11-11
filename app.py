@@ -22,22 +22,24 @@ def home():
     notLogged = ''
     username = None
     latest_post = None
+    is_admin = None
 
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
         latest_post = blogposts.find_one(sort=[("_id", pymongo.DESCENDING)])
         if user:
             username = user["username"]
+            is_admin = user.get("admin", False)
     else:
         notLogged = True
 
-    return render_template('index.html', home=True, username=username, title="AdiAvi", notLogged=notLogged, latest_post=latest_post)
+    return render_template('index.html', home=True, username=username, title="AdiAvi", notLogged=notLogged, latest_post=latest_post,admin=is_admin)
 
 @app.route('/posts', methods=['GET', 'POST'])
 def post():
     new_post_id = None
     username = None
-    is_admin = False
+    is_admin = None
     posted = False
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
@@ -74,7 +76,7 @@ def post():
         post['comments'] = list(comments_for_post)
         post_comments.append(post)
 
-    return render_template('post.html', posts=True, title="AdiAvi Posts", blog_posts=post_comments, username=username, is_admin=is_admin, posted=posted)
+    return render_template('post.html', posts=True, title="AdiAvi Posts", blog_posts=post_comments, username=username, admin=is_admin, posted=posted)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -204,12 +206,14 @@ def delete_post(post_id):
 @app.route('/about')
 def about():
     username = None
+    is_admin = None
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
         if user:
             if user:
                 username = user["username"]
-    return render_template('about.html', username=username,about1=True, title="About Us")
+                is_admin = user.get("admin", False)
+    return render_template('about.html', username=username,about1=True, title="About Us", admin=is_admin)
 
 
 @app.route('/post/<post_id>')

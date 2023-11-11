@@ -26,48 +26,71 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="/static/img/boredblog.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-            AdiAvi
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link {% if home %}active{% endif %}" aria-current="page" href="/">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if posts %}active{% endif %}" href="/posts">Posts</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link {% if about1 %}active {% endif %}" href="/about">About</a>
-              </li>
+            <a class="navbar-brand" href="#">
+                <img src="/static/img/boredblog.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                AdiAvi
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link {% if home %}active{% endif %}" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if posts %}active{% endif %}" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if about1 %}active {% endif %}" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <ul class="navbar-nav ms-auto">
+                {% if username %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ username }}
+                        </a>
+                        <!-- Apply the custom-dropdown-menu class to the dropdown menu -->
+                        <ul class="dropdown-menu-dark dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="/logout">
+                                  <img src="/static/img/icons8-logout-30.png" alt="Logout Logo" width="20" height="20" class="d-inline-block align-text-top me-2">
+                                  Logout
+                                </a>
+                            </li>
+                            <li>
+                                <!-- Discord Logo as a link -->
+                                <!-- Discord Logo as a link -->
+                                <a class="dropdown-item d-flex align-items-center" href="/static/img/discord.png">
+                                  <img src="/static/img/icons8-discord-30.png" alt="Discord Logo" width="20" height="20" class="d-inline-block align-text-top me-2">
+                                  Join our Discord
+                                </a>
+
+                            </li>
+                            {% if admin %}
+                            <li>
+                              <a class="dropdown-item d-flex align-items-center" href="/static/img/icons8-lock-30.png">
+                                <img src="/static/img/icons8-lock-30.png" alt="Discord Logo" width="20" height="20" class="d-inline-block align-text-top me-2">
+                                Admin
+                              </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if loginBar %}active {% endif %}" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if regBar %}active{% endif %}" href="/register">Register</a>
+                    </li>
+                {% endif %}
             </ul>
-          </div>
-          <ul class="navbar-nav ms-auto">
-            {% if username %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ username }}
-                    </a>
-                    <!-- Apply the custom-dropdown-menu class to the dropdown menu -->
-                    <ul class="dropdown-menu-dark dropdown-menu dropdown-menu-end " aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                    </ul>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link {% if loginBar %}active {% endif %}" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if regBar %}active{% endif %}" href="/register">Register</a>
-                </li>
-            {% endif %}
-          </ul>
         </div>
-      </nav>
+    </nav>
 
     <div class="container mt-4">
         {% block content %}{% endblock %}

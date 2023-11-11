@@ -5,16 +5,18 @@
     body {
         color: white !important;
     }
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 </style>
 <div class="card bg-dark text-light mb-4">
     <div class="card-header">
         <h2 class="text-light">{{ post.title }}</h2>
     </div>
     <div class="card-body">
-        <h5 class="card-subtitle text-white mb-3">
-            Subject: {{ post.subject }}<br>Author: {{ post.author }}<br> Date: {{ post.date }}
-        </h5>
-        <pre class="card-text" style="white-space: pre-line;">{{ post.content | safe }}</pre>
+        <h5 style="font-size: 1.5rem; font-weight: bold;" >{{ post.subject }}</h5>
+        <h6 style="font-size: 1.1rem;" >{{ post.author }}</h6>
+        <h6 style="font-size: 1rem;" >{{ post.date }}</h6>
+
+        <pre class="card-text" style="white-space: pre-line;font-family: 'Open Sans', sans-serif;">{{ post.content | safe }}</pre>
 
         <!-- Like button with icon and number of likes -->
         <form method="POST" action="/like_post/{{ post._id }}">
@@ -59,7 +61,7 @@
                 <label for="comment" class="form-label text-light">Your Comment</label>
                 <textarea class="form-control bg-dark text-light" id="comment" name="comment" rows="4" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
+            <button type="submit" class="btn btn-success">Comment</button>
         </form>
     </div>
 </div>
