@@ -69,8 +69,7 @@
             {% if username %}
                 <a class="btn btn-primary" href="/post/{{ post._id }}" role="button">View Entire Post</a>
             {% else %}
-                <!-- Show a message or a disabled button for users who are not logged in -->
-                <button class="btn btn-primary" disabled>Log in to View The Entire Post</button>
+                <a class="btn btn-primary" href="/post/{{ post._id }}" role="button">View Post</a>
             {% endif %}
         </div>
         
