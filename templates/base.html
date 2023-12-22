@@ -5,7 +5,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital@1&family=Work+Sans&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="/static/img/boredblog.png">
+    <link rel="icon" type="image/png" href="/static/img/adiavi.png">
     <link rel="stylesheet" href="/static/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <meta charset="UTF-8">
@@ -22,12 +22,29 @@
     .custom-dropdown-menu {
         max-width: 200px !important; /* Adjust the max-width as needed */
     }
+    body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* This ensures the body takes at least the full height of the viewport */
+}
+
+.container {
+    flex: 1; /* This allows the container to take up the remaining vertical space */
+}
+
+.footer {
+    background-color: #121212;
+    color: #fff;
+    padding: 10px 0;
+    flex-shrink: 0; /* Prevents the footer from shrinking */
+}
+
 </style>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="/static/img/boredblog.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                <img src="/static/img/adiavi.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 AdiAvi
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +88,7 @@
                             </li>
                             {% if admin %}
                             <li>
-                              <a class="dropdown-item d-flex align-items-center" href="/static/img/icons8-lock-30.png">
+                              <a class="dropdown-item d-flex align-items-center" href="/admin/users">
                                 <img src="/static/img/icons8-lock-30.png" alt="Discord Logo" width="20" height="20" class="d-inline-block align-text-top me-2">
                                 Admin
                               </a>

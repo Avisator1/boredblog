@@ -41,18 +41,6 @@
             </div>
         </div>
     </section>
-    {% if notLogged %}
-    <section class="cta text-center mt-5">
-        <h2>Subscribe to Our Newsletter</h2>
-        <p>Stay updated with the latest articles and news from our blog.</p>
-        <form>
-            <div class="form-group">
-                <input type="email" class="form-control" placeholder="Enter your email">
-            </div>
-            <a class="btn btn-primary" href="/register" role="button">Subscribe</a>
-        </form>
-    </section>
-    {% endif %}
     
     {% if latest_post %}
     <section class="latest-post mt-5">
@@ -63,9 +51,17 @@
                 <h6 class="card-subtitle mb-2 text-white">Author: {{ latest_post.author }}</h6>
 
             <!-- Display content exactly as the user typed it, preserving formatting and line breaks -->
-                <pre class="card-text" data-post-id="{{latest_post._id }}" style="white-space: pre-line;">{{ latest_post.content | safe }}</pre>
+                <pre class="card-text" data-post-id="{{latest_post._id }}" style="white-space: pre-line;">{{ latest_post.content[:200] + '...' if latest_post.content|length > 200 else latest_post.content | safe }}</pre>
 
                 <p class="card-text"><small class="text-white">Date: {{ latest_post.date }}</small></p>
+                <div class="card-footer">
+                    {% if username %}
+                        <a class="btn btn-primary" href="/post/{{latest_post._id }}" role="button">View Entire Post</a>
+                    {% else %}
+                        <!-- Show a message or a disabled button for users who are not logged in -->
+                        <button class="btn btn-primary" disabled>Log in to View The Entire Post</button>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </section>

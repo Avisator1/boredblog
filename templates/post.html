@@ -14,7 +14,7 @@
     {% if username %}
     <p class="text-white">Welcome, {{ username }}!</p>
     {% endif %}
-    {% if is_admin %}
+    {% if admin %}
     <form method="POST" action="/posts" class="mb-4">
         <!-- Form for creating a new post (if the user is an admin) -->
         <div class="mb-3">
@@ -31,7 +31,7 @@
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Post Body:</label>
-            <textarea class="form-control bg-dark text-white" name="content" id="content" rows="4" required></textarea>
+            <textarea class="form-control bg-dark text-white" name="content" id="content" rows="10" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Create Post</button>
     </form>

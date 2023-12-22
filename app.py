@@ -23,10 +23,9 @@ def home():
     username = None
     latest_post = None
     is_admin = None
-
+    latest_post = blogposts.find_one(sort=[("_id", pymongo.DESCENDING)])
     if "user_id" in session:
         user = userdb.find_one({"_id": ObjectId(session["user_id"])})
-        latest_post = blogposts.find_one(sort=[("_id", pymongo.DESCENDING)])
         if user:
             username = user["username"]
             is_admin = user.get("admin", False)
